@@ -42,7 +42,7 @@
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 .title,
@@ -104,8 +104,7 @@
 }
 
 .logo {
-  height: 1em;
-  margin-left: 0.5rem;
+  margin-left: 0.2rem;
 }
 
 @media (max-width: 600px) {
