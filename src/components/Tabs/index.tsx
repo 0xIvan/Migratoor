@@ -16,7 +16,7 @@ export const Tabs: React.FC<Props> = (props) => {
   const activeTab = tabs.find((t) => t.value === value) || tabs[0];
 
   return (
-    <div>
+    <div className="flex flex-col items-center w-4/5">
       <div className={styles.tabsContainer}>
         {tabs.map((t) => (
           <button
@@ -28,7 +28,7 @@ export const Tabs: React.FC<Props> = (props) => {
           </button>
         ))}
       </div>
-      {activeTab.component}
+      <div className="w-full">{activeTab.component}</div>
     </div>
   );
 };
