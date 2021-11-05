@@ -1,6 +1,8 @@
 import clsx from "clsx";
-import React from "react";
+import { stringify } from "querystring";
+import React, { createContext, useState } from "react";
 
+import { TabsContext } from "../../common/context";
 import { Tab } from "../../types";
 import styles from "./Tabs.module.css";
 
@@ -14,6 +16,7 @@ export const Tabs: React.FC<Props> = (props) => {
   const { value, tabs, handleChangeTab } = props;
 
   const activeTab = tabs.find((t) => t.value === value) || tabs[0];
+  const [state, setState] = useState<Record<string, any>>({});
 
   return (
     <div className="flex flex-col items-center w-4/5">
@@ -28,7 +31,9 @@ export const Tabs: React.FC<Props> = (props) => {
           </button>
         ))}
       </div>
-      <div className="w-full">{activeTab.component}</div>
+      <TabsContext.Provider value={{ state, setState }}>
+        <div className="w-full">{activeTab.component}</div>
+      </TabsContext.Provider>
     </div>
   );
 };
