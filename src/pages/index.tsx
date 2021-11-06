@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import React, { useState } from "react";
 
+import { Pair } from "../components/Pair";
 import { Tabs } from "../components/Tabs";
 import { TokenList } from "../components/TokenList";
 import { Tab } from "../types";
@@ -9,7 +10,7 @@ import { Tab } from "../types";
 const Home: NextPage = () => {
   const tabs: Tab[] = [
     { value: "tokenList", label: "Token list", component: <TokenList /> },
-    { value: "pair", label: "Pair", component: <div></div> },
+    { value: "pair", label: "Pair", component: <Pair /> },
     { value: "migrate", label: "Migrate", component: <div></div> },
   ];
 

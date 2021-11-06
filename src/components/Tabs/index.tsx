@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { stringify } from "querystring";
-import React, { createContext, useState } from "react";
+import React, { useState } from "react";
 
 import { TabsContext } from "../../common/context";
 import { Tab } from "../../types";
