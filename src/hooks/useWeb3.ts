@@ -1,10 +1,12 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
+type EthChainId = 1 | 3 | 4 | 5 | 42;
+
 export const useWeb3 = () => {
   const [loading, setLoading] = useState(true);
   const [account, setAccount] = useState("");
-  const [chainId, setChainId] = useState(1);
+  const [chainId, setChainId] = useState<EthChainId>(1);
   const [isConnected, setIsConnected] = useState(false);
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner>();
@@ -29,7 +31,7 @@ export const useWeb3 = () => {
         setSigner(_signer);
         setIsConnected(_isConnected);
         setAccount(_account);
-        setChainId(_chainId);
+        setChainId(_chainId as EthChainId);
         setLoading(false);
       } catch (err) {
         console.error(err);

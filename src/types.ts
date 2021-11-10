@@ -1,6 +1,6 @@
 export interface TabContext {
   state: Record<string, any>;
-  setState: (props: any) => void;
+  updateState: (props: any) => void;
 }
 export interface Tab {
   value: string;

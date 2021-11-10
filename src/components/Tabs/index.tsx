@@ -16,6 +16,11 @@ export const Tabs: React.FC<Props> = (props) => {
 
   const activeTab = tabs.find((t) => t.value === value) || tabs[0];
   const [state, setState] = useState<Record<string, any>>({});
+  const updateState = (updatedValues: Record<string, any>) => {
+    setState((prevState) => {
+      return { ...prevState, ...updatedValues };
+    });
+  };
 
   return (
     <div className="flex flex-col items-center w-4/5">
@@ -30,7 +35,7 @@ export const Tabs: React.FC<Props> = (props) => {
           </button>
         ))}
       </div>
-      <TabsContext.Provider value={{ state, setState }}>
+      <TabsContext.Provider value={{ state, updateState }}>
         <div className="w-full">{activeTab.component}</div>
       </TabsContext.Provider>
     </div>

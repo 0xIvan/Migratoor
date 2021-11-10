@@ -20,10 +20,9 @@ export const TokenList = () => {
     setCopiedAddress(text);
   };
 
-  const tokenListWithWeth = [
-    ...tokenList,
-    WETH[chainId as 1 | 3 | 4 | 5 | 42],
-  ].sort((a, b) => (String(a.symbol) < String(b.symbol) ? -1 : 1));
+  const tokenListWithWeth = [...tokenList, WETH[chainId]].sort((a, b) =>
+    String(a.symbol) < String(b.symbol) ? -1 : 1
+  );
 
   return (
     <div className="flex justify-center">

@@ -1,12 +1,18 @@
+import clsx from "clsx";
+
 interface Props {
   header: string;
+  className?: string;
 }
 
 export const Card: React.FC<Props> = (props) => {
   return (
     <div
-      className="overflow-hidden text-center rounded-md shadow-md"
-      style={{ width: 350 }}
+      className={clsx(
+        props.className,
+        "overflow-hidden text-center rounded-md shadow-md"
+      )}
+      style={{ width: 500 }}
     >
       {props.header && (
         <div className="px-5 py-3 bg-gray-100">
