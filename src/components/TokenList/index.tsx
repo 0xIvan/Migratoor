@@ -2,6 +2,9 @@ import copy from "copy-to-clipboard";
 import Image from "next/image";
 import React, { useState } from "react";
 
+import { WETH } from "@uniswap/sdk";
+
+import { useWeb3 } from "../../hooks/useWeb3";
 import checkMarkIcon from "../../icons/checkmark.svg";
 import copyIcon from "../../icons/copy.svg";
 import { tokenList } from "./tokenList";
@@ -9,12 +12,18 @@ import { tokenList } from "./tokenList";
 export const TokenList = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [copiedAddress, setCopiedAddress] = useState<string>("");
+  const { chainId } = useWeb3();
 
   const copyAddress = (text: string) => {
     const copied = copy(text);
     setIsCopied(copied);
     setCopiedAddress(text);
   };
+
+  const tokenListWithWeth = [
+    ...tokenList,
+    WETH[chainId as 1 | 3 | 4 | 5 | 42],
+  ].sort((a, b) => (String(a.symbol) < String(b.symbol) ? -1 : 1));
 
   return (
     <div className="flex justify-center">
@@ -37,7 +46,7 @@ export const TokenList = () => {
           </tr>
         </thead>
         <tbody>
-          {tokenList.map((token) => (
+          {tokenListWithWeth.map((token) => (
             <tr key={token.address} className="h-8">
               <td className="px-4">{token.name}</td>
               <td>{token.symbol}</td>
