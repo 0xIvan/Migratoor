@@ -1,4 +1,4 @@
-import { BigNumberish, ethers } from "ethers";
+import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
 
 import {
@@ -101,14 +101,20 @@ export const PairSearch: React.FC = () => {
   const searchPair = async () => {
     setLoading(true);
     const pairAddress = await fetchPairAddress();
-    if (!pairAddress) return;
+    if (!pairAddress) {
+      setLoading(false);
+      return;
+    }
 
     await fetchPairBalance(pairAddress);
 
     const token0Input = await fetchToken(state.token0Address);
     const token1Input = await fetchToken(state.token1Address);
 
-    if (!token0Input || !token1Input) return;
+    if (!token0Input || !token1Input) {
+      setLoading(false);
+      return;
+    }
 
     try {
       const pairInstance = new ethers.Contract(
@@ -194,14 +200,6 @@ export const PairSearch: React.FC = () => {
             <div className="flex justify-between">
               <span>Pooled tokens</span>
               <span>{fromWeiFormatted(state.pairBalance)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Pooled {token0Symbol}</span>
-              <span>{state.pair.reserve0.toFixed(3)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Pooled {token1Symbol}</span>
-              <span>{state.pair.reserve1.toFixed(3)}</span>
             </div>
           </div>
         )}
