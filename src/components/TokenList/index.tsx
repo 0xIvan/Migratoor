@@ -31,16 +31,14 @@ export const TokenList = () => {
           <tr>
             <th
               scope="col"
-              className="px-4 py-3 text-sm font-medium text-left text-gray-500 uppercase w-52"
+              className="w-48 px-4 py-3 font-semibold text-left text-md"
             >
               Name
             </th>
-            <th className="w-24 py-3 text-sm font-medium text-left text-gray-500 uppercase">
+            <th className="w-24 py-3 font-semibold text-left text-md">
               Symbol
             </th>
-            <th className="py-3 text-sm font-medium text-left text-gray-500 uppercase">
-              Address
-            </th>
+            <th className="py-3 font-semibold text-left text-md ">Address</th>
             <th className="w-12" />
           </tr>
         </thead>
