@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-type EthChainId = 1 | 3 | 4 | 5 | 42;
+export type EthChainId = 1 | 3 | 4 | 5 | 42;
 
 export const useWeb3 = () => {
   const [loading, setLoading] = useState(true);
