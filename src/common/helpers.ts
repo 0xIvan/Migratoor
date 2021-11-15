@@ -13,8 +13,14 @@ export const fromWeiFormatted = (wei: BigNumberish, decimals = 3): string => {
   return ether.toFixed(decimals);
 };
 
-export const toWei = (ether: string): BigNumberish =>
-  ethers.utils.parseEther(ether);
+export const toWei = (ether: string): BigNumberish => {
+  try {
+    return ethers.utils.parseEther(ether);
+  } catch (err) {
+    console.error(err);
+    return ether;
+  }
+};
 
 export const fetchToken = async (
   tokenAddress: string,
