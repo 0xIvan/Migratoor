@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { TabsContext } from "../../common/context";
 import { fromWeiFormatted, getTokenSymbol } from "../../common/helpers";
@@ -11,6 +11,7 @@ export const PairSearch: React.FC = () => {
   const { state, updateState } = useContext(TabsContext);
   const { chainId, isConnected, connectWallet } = useWeb3();
   const {
+    totalSupply,
     invalidPair,
     loading,
     token0AddressSorted,
@@ -26,15 +27,26 @@ export const PairSearch: React.FC = () => {
   const token1Symbol = getTokenSymbol(token1AddressSorted, chainId);
 
   useEffect(() => {
-    if (pair && pairBalance) {
+    if (pair && pairBalance && amount0 && amount1 && totalSupply) {
       updateState({
         pair,
         pairBalance,
         amount0,
         amount1,
+        totalSupply,
+        token0Address: token0AddressSorted,
+        token1Address: token1AddressSorted,
       });
     }
-  }, []);
+  }, [
+    amount0,
+    amount1,
+    pair,
+    pairBalance,
+    totalSupply,
+    token0AddressSorted,
+    token1AddressSorted,
+  ]);
 
   const setToken0Address = (address: string) => {
     updateState({ token0Address: address });

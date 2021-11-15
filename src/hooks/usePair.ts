@@ -22,6 +22,7 @@ export const usePair = (token0Address: string, token1Address: string) => {
   const [pairBalance, setPairBalance] = useState<BigNumber>();
   const [amount0, setAmount0] = useState<TokenAmount>();
   const [amount1, setAmount1] = useState<TokenAmount>();
+  const [totalSupply, setTotalSupply] = useState<TokenAmount>();
 
   const factory = useContract(FACTORY_ADDRESS, IUniswapV2Factory.abi);
 
@@ -40,7 +41,7 @@ export const usePair = (token0Address: string, token1Address: string) => {
   const getPairAddress = useCallback(async (): Promise<string | undefined> => {
     setInvalidPair(false);
 
-    const pairAddress = await factory.getPair(token0Address, token1Address);
+    const pairAddress = await factory?.getPair(token0Address, token1Address);
 
     if (pairAddress === ethers.constants.AddressZero) {
       setInvalidPair(true);
@@ -102,25 +103,26 @@ export const usePair = (token0Address: string, token1Address: string) => {
       amount0: TokenAmount;
       amount1: TokenAmount;
     }> => {
-      const token0 = pair.token0;
-      const token1 = pair.token1;
-      const pairAddress = pair.liquidityToken.address;
+      const { token0, token1, liquidityToken } = pair;
+      const pairAddress = liquidityToken.address;
 
       const poolTotalSupply = await getPoolTotalSupply(pairAddress);
       const _pairBalance = await getPairBalance(pairAddress);
       setPairBalance(_pairBalance);
 
-      const totalSupply = new TokenAmount(
-        pair.liquidityToken,
-        poolTotalSupply.toString()
-      );
       const liquidity = new TokenAmount(
         pair.liquidityToken,
         _pairBalance.toString()
       );
+      const _totalSupply = new TokenAmount(
+        pair.liquidityToken,
+        poolTotalSupply.toString()
+      );
 
-      const amount0 = pair.getLiquidityValue(token0, totalSupply, liquidity);
-      const amount1 = pair.getLiquidityValue(token1, totalSupply, liquidity);
+      setTotalSupply(_totalSupply);
+
+      const amount0 = pair.getLiquidityValue(token0, _totalSupply, liquidity);
+      const amount1 = pair.getLiquidityValue(token1, _totalSupply, liquidity);
 
       return { amount0, amount1 };
     },
@@ -161,6 +163,7 @@ export const usePair = (token0Address: string, token1Address: string) => {
   }, [exec, getPair, getPairAddress, getProvidedLiquidity]);
 
   return {
+    totalSupply,
     invalidPair,
     loading,
     setExec,
