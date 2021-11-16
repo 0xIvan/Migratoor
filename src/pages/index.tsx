@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import React, { useState } from "react";
 
+import { Migrate } from "../components/Migrate";
 import { PairSearch } from "../components/PairSearch";
 import { Tabs } from "../components/Tabs";
 import { TokenList } from "../components/TokenList";
@@ -11,7 +12,7 @@ const Home: NextPage = () => {
   const tabs: Tab[] = [
     { value: "tokenList", label: "Token list", component: <TokenList /> },
     { value: "pair", label: "Pair", component: <PairSearch /> },
-    { value: "migrate", label: "Migrate", component: <div></div> },
+    { value: "migrate", label: "Migrate", component: <Migrate /> },
   ];
 
   const [selectedTab, setSelectedTab] = useState<Tab["value"]>("tokenList");
