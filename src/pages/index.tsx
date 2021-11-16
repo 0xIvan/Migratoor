@@ -10,16 +10,12 @@ import { Tab } from "../types";
 
 const Home: NextPage = () => {
   const tabs: Tab[] = [
-    { value: "tokenList", label: "Token list", component: <TokenList /> },
-    { value: "pair", label: "Pair", component: <PairSearch /> },
-    { value: "migrate", label: "Migrate", component: <Migrate /> },
+    { label: "Token list", component: <TokenList /> },
+    { label: "Pair", component: <PairSearch /> },
+    { label: "Migrate", component: <Migrate /> },
   ];
 
-  const [selectedTab, setSelectedTab] = useState<Tab["value"]>("tokenList");
-
-  const handleChangeTab = (value: Tab["value"]) => {
-    setSelectedTab(value);
-  };
+  const [selectedTab, setSelectedTab] = useState<number>(0);
 
   return (
     <div className="px-8">
@@ -36,9 +32,9 @@ const Home: NextPage = () => {
           </h1>
         </div>
         <Tabs
-          value={selectedTab}
+          selectedTab={selectedTab}
           tabs={tabs}
-          handleChangeTab={handleChangeTab}
+          setSelectedTab={setSelectedTab}
         />
       </main>
 
