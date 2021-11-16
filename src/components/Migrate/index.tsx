@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import React, { useContext, useState } from "react";
 
 import { TabsContext } from "../../common/context";
@@ -24,10 +25,15 @@ export const Migrate = () => {
     totalSupply
   );
 
-  const onMigrate = async (withPermit: boolean) =>
-    withPermit
-      ? migrateWithPermit(pair, toWei(migrateAmount).toString())
-      : migrate(pair, toWei(migrateAmount).toString());
+  const handleMigrate = async (withPermit: boolean) => {
+    const migrateFn = withPermit ? migrateWithPermit : migrate;
+
+    try {
+      migrateFn(pair, toWei(migrateAmount).toString());
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -58,13 +64,15 @@ export const Migrate = () => {
               </div>
               <button
                 className="self-center w-3/5 m-2 btn"
-                onClick={() => (!isApproved ? approve() : onMigrate(false))}
+                onClick={() => (!isApproved ? approve() : handleMigrate(false))}
+                disabled={BigNumber.from(migrateAmount).eq(0)}
               >
                 {!isApproved ? "Approve" : "Migrate"}
               </button>
               <button
                 className="self-center w-3/5 btn"
-                onClick={() => onMigrate(true)}
+                onClick={() => handleMigrate(true)}
+                disabled={BigNumber.from(migrateAmount).eq(0)}
               >
                 Migrate with signature
               </button>
