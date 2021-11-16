@@ -48,8 +48,8 @@ export const Tabs: React.FC<Props> = (props) => {
             <button
               key={i}
               className={clsx(
-                styles.tab,
-                selectedTab === i && styles.activeTab
+                "px-4 py-2",
+                selectedTab === i && "text-white bg-gray-600 rounded-xl"
               )}
               onClick={() => setSelectedTab(i)}
             >

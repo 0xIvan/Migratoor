@@ -1,7 +1,0 @@
-.tab {
-  @apply px-4 py-2;
-}
-
-.activeTab {
-  @apply text-white bg-gray-600 rounded-xl;
-}
