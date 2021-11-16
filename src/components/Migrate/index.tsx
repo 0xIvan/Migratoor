@@ -3,13 +3,14 @@ import React, { useContext, useState } from "react";
 
 import { TabsContext } from "../../common/context";
 import { fromWeiFormatted, toWei } from "../../common/helpers";
+import { usePair } from "../../hooks/usePair";
 import { useSushiRoll } from "../../hooks/useSushiRoll";
 import { useTokenApprove } from "../../hooks/useTokenApprove";
 import { Card } from "../Card";
 import { TextInput } from "../TextInput";
 
 export const Migrate = () => {
-  const { state } = useContext(TabsContext);
+  const { state, updateState } = useContext(TabsContext);
   const { pair, token0Address, token1Address, totalSupply, pairBalance } =
     state;
   const sushiRollAddress = "0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5";
@@ -24,14 +25,33 @@ export const Migrate = () => {
     token1Address,
     totalSupply
   );
+  const { getPairBalance } = usePair(token0Address, token1Address);
+  const [loading, setLoading] = useState(false);
+
+  const handleApprove = async () => {
+    try {
+      setLoading(true);
+      await approve();
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
 
   const handleMigrate = async (withPermit: boolean) => {
     const migrateFn = withPermit ? migrateWithPermit : migrate;
 
     try {
-      migrateFn(pair, toWei(migrateAmount).toString());
+      setLoading(true);
+      await migrateFn(pair, toWei(migrateAmount).toString());
+      const newBalance = await getPairBalance(pair.liquidityToken.address);
+      updateState({ pairBalance: newBalance });
+      setMigrateAmount("0");
+      setLoading(false);
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   };
 
@@ -62,20 +82,30 @@ export const Migrate = () => {
                   value={migrateAmount}
                 />
               </div>
-              <button
-                className="self-center w-3/5 m-2 btn"
-                onClick={() => (!isApproved ? approve() : handleMigrate(false))}
-                disabled={BigNumber.from(migrateAmount).eq(0)}
-              >
-                {!isApproved ? "Approve" : "Migrate"}
-              </button>
-              <button
-                className="self-center w-3/5 btn"
-                onClick={() => handleMigrate(true)}
-                disabled={BigNumber.from(migrateAmount).eq(0)}
-              >
-                Migrate with signature
-              </button>
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-16 h-16 border-b-2 border-gray-400 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                <>
+                  <button
+                    className="self-center w-3/5 m-2 btn"
+                    onClick={() =>
+                      !isApproved ? handleApprove() : handleMigrate(false)
+                    }
+                    disabled={BigNumber.from(migrateAmount).eq(0)}
+                  >
+                    {!isApproved ? "Approve" : "Migrate"}
+                  </button>
+                  <button
+                    className="self-center w-3/5 btn"
+                    onClick={() => handleMigrate(true)}
+                    disabled={BigNumber.from(migrateAmount).eq(0)}
+                  >
+                    Migrate with signature
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>

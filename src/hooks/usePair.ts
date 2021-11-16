@@ -163,6 +163,7 @@ export const usePair = (token0Address: string, token1Address: string) => {
   }, [exec, getPair, getPairAddress, getProvidedLiquidity]);
 
   return {
+    getPairBalance,
     totalSupply,
     invalidPair,
     loading,
