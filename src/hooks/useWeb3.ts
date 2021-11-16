@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 export type EthChainId = 1 | 3 | 4 | 5 | 42;
 
 export const useWeb3 = () => {
-  const [loading, setLoading] = useState(true);
   const [account, setAccount] = useState("");
   const [chainId, setChainId] = useState<EthChainId>(1);
   const [isConnected, setIsConnected] = useState(false);
@@ -32,10 +31,8 @@ export const useWeb3 = () => {
         setIsConnected(_isConnected);
         setAccount(_account);
         setChainId(_chainId as EthChainId);
-        setLoading(false);
       } catch (err) {
         console.error(err);
-        setLoading(false);
       }
     };
 
@@ -45,7 +42,6 @@ export const useWeb3 = () => {
   return {
     provider,
     signer,
-    loading,
     account,
     chainId,
     isConnected,

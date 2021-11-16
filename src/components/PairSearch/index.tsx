@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { TabsContext } from "../../common/context";
 import { fromWeiFormatted, getTokenSymbol } from "../../common/helpers";
@@ -22,12 +22,11 @@ export const PairSearch: React.FC = () => {
     amount1,
     setExec,
   } = usePair(state.token0Address, state.token1Address);
-
-  const token0Symbol = getTokenSymbol(token0AddressSorted, chainId);
-  const token1Symbol = getTokenSymbol(token1AddressSorted, chainId);
+  const [token0Symbol, setToken0Symbol] = useState("");
+  const [token1Symbol, setToken1Symbol] = useState("");
 
   useEffect(() => {
-    if (pair && pairBalance && amount0 && amount1 && totalSupply) {
+    if (pair) {
       updateState({
         pair,
         pairBalance,
@@ -38,6 +37,7 @@ export const PairSearch: React.FC = () => {
         token1Address: token1AddressSorted,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     amount0,
     amount1,
@@ -47,6 +47,13 @@ export const PairSearch: React.FC = () => {
     token0AddressSorted,
     token1AddressSorted,
   ]);
+
+  useEffect(() => {
+    if (state.token0Address && state.token1Address) {
+      setToken0Symbol(getTokenSymbol(state.token0Address, chainId));
+      setToken1Symbol(getTokenSymbol(state.token1Address, chainId));
+    }
+  }, [chainId, state.token0Address, state.token1Address]);
 
   const setToken0Address = (address: string) => {
     updateState({ token0Address: address });

@@ -42,6 +42,8 @@ export const getContract = (
 };
 
 export const getTokenSymbol = (tokenAddress: string, chainId: EthChainId) => {
+  if (!tokenAddress) return "";
+
   const token =
     tokenAddress === WETH[chainId].address
       ? WETH[chainId]
@@ -49,6 +51,5 @@ export const getTokenSymbol = (tokenAddress: string, chainId: EthChainId) => {
           (t) => t.address.toLowerCase() === tokenAddress.toLowerCase()
         );
 
-  if (!token) return "N/A";
-  return token.symbol;
+  return token?.symbol || "N/A";
 };
